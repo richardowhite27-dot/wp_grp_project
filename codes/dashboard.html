@@ -1,0 +1,160 @@
+/* Project: JA Threads - Group Project 
+    Student Name: Richardo White, Donnyl Williams, Michalia Williams 
+    Module: CIT2011 - Web Programming
+*/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | JA Threads</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Dashboard specific styling */
+        .dash-section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007749; color: white; }
+        .search-bar { margin-bottom: 20px; padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 4px; }
+        .stat-card { text-align: center; padding: 10px; background: #f9f9f9; border-radius: 5px; border: 1px solid #eee; }
+    </style>
+</head>
+<body style="background: #f0f2f5; font-family: Arial, sans-serif; margin: 0;">
+
+  <nav style="background:#000; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; color:#ffb81c;">
+    <div style="font-size:1.2rem; font-weight:bold;">🇯🇲 JA Threads</div>
+    <div id="nav-links">
+        <a href="home.html" style="color:white; margin-right:15px; text-decoration:none;">Home</a>
+        
+        <a href="products.html" style="color:white; margin-right:15px; text-decoration:none;">Shop</a>
+        
+        <a href="cart.html" style="color:white; margin-right:15px; text-decoration:none;">Cart</a>
+        <a href="dashboard.html" style="color:#ffb81c; font-weight:bold; text-decoration:none;">Dashboard</a>
+        
+        <button onclick="logout()" style="margin-left:15px; padding:5px 10px; cursor:pointer; background:#d9534f; color:white; border:none; border-radius:4px;">Logout</button>
+    </div>
+</nav>
+
+    <div style="padding: 20px; max-width: 1200px; margin: auto;">
+        <header style="margin-bottom: 30px;">
+            <h1>Management Dashboard</h1>
+            <p>Real-time analytics and invoice tracking</p>
+        </header>
+
+        <div class="stat-grid">
+            <section class="dash-section">
+                <h3>User Frequency (Gender)</h3>
+                <div id="gender-stats" style="display: flex; justify-content: space-around; gap: 10px;">
+                    </div>
+            </section>
+
+            <section class="dash-section">
+                <h3>User Frequency (Age Groups)</h3>
+                <div id="age-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    </div>
+            </section>
+        </div>
+
+        <section class="dash-section">
+            <h3>Invoice Management</h3>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <input type="text" id="trnSearch" class="search-bar" placeholder="Search by TRN (000-000-000)..." style="margin-bottom: 0;">
+                <button onclick="performSearch()" style="padding: 10px 20px; cursor: pointer; background: #000; color: #ffb81c; border: none; border-radius: 4px; font-weight: bold;">Search</button>
+                <button onclick="displayAllInvoicesTable()" style="padding: 10px 10px; cursor: pointer; background: #eee; border: 1px solid #ccc; border-radius: 4px;">Reset</button>
+            </div>
+            
+            <div id="invoice-results" style="margin-top: 20px;">
+                </div>
+        </section>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Run existing console logic
+            ShowUserFrequency();
+            // Update the HTML with stats
+            updateVisualDashboard();
+            // Display initial invoices
+            displayAllInvoicesTable();
+        });
+
+        function updateVisualDashboard() {
+            const users = JSON.parse(localStorage.getItem('RegistrationData')) || [];
+            const genderDiv = document.getElementById('gender-stats');
+            const ageDiv = document.getElementById('age-stats');
+
+            const report = {
+                gender: { Male: 0, Female: 0, Other: 0 },
+                ageGroups: { "18-25": 0, "26-35": 0, "36-50": 0, "50+": 0 }
+            };
+
+            const today = new Date();
+            users.forEach(user => {
+                if (report.gender[user.gender] !== undefined) report.gender[user.gender]++;
+                else report.gender.Other++;
+
+                const dob = new Date(user.dob);
+                let age = today.getFullYear() - dob.getFullYear();
+                if (age >= 18 && age <= 25) report.ageGroups["18-25"]++;
+                else if (age >= 26 && age <= 35) report.ageGroups["26-35"]++;
+                else if (age >= 36 && age <= 50) report.ageGroups["36-50"]++;
+                else if (age > 50) report.ageGroups["50+"]++;
+            });
+
+            // Display Gender Stats
+            genderDiv.innerHTML = Object.keys(report.gender).map(key => `
+                <div class="stat-card">
+                    <small>${key}</small>
+                    <h2 style="margin: 5px 0;">${report.gender[key]}</h2>
+                </div>
+            `).join('');
+
+            // Display Age Stats
+            ageDiv.innerHTML = Object.keys(report.ageGroups).map(key => `
+                <div class="stat-card">
+                    <small>Age ${key}</small>
+                    <h2 style="margin: 5px 0;">${report.ageGroups[key]}</h2>
+                </div>
+            `).join('');
+        }
+
+        function displayAllInvoicesTable(filterData = null) {
+            const data = filterData || JSON.parse(localStorage.getItem('AllInvoices')) || [];
+            const container = document.getElementById('invoice-results');
+            
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>TRN</th>
+                        <th>Date</th>
+                        <th>Total (JMD)</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            data.forEach(inv => {
+                html += `<tr>
+                    <td><code>${inv.invoiceNumber}</code></td>
+                    <td>${inv.trn}</td>
+                    <td>${inv.date}</td>
+                    <td>$${inv.total.toLocaleString()}</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = data.length > 0 ? html : "<p>No matching invoices found in the system.</p>";
+        }
+
+        function performSearch() {
+            const trn = document.getElementById('trnSearch').value;
+            const allInvoices = JSON.parse(localStorage.getItem('AllInvoices')) || [];
+            const filtered = allInvoices.filter(inv => inv.trn === trn);
+            displayAllInvoicesTable(filtered);
+        }
+    </script>
+</body>
+</html>

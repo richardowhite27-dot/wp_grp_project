@@ -1,0 +1,102 @@
+/* Project: JA Threads - Group Project 
+    Student Name: Richardo White, Donnyl Williams, Michalia Williams 
+    Module: CIT2011 - Web Programming
+*/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | JA Threads</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Internal styles to ensure the hero section looks right if external CSS is minimal */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../assets/hero-bg.jpg'); /* Optional background image */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 20px;
+            text-align: center;
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: #febd11; }
+        .hero p { font-size: 1.2rem; margin-bottom: 40px; }
+        .shop-btn {
+            background: #febd11;
+            color: #000;
+            padding: 18px 45px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .shop-btn:hover { background: #fff; }
+        
+        nav {
+            background: #000;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav .logo { color: #febd11; font-size: 1.8rem; font-weight: bold; }
+        nav ul { list-style: none; display: flex; margin: 0; padding: 0; }
+        nav ul li { margin-left: 25px; }
+        nav ul li a { color: #fff; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        nav ul li a:hover { color: #febd11; }
+        .logout-link { color: #ff4444 !important; font-weight: bold; }
+    </style>
+</head>
+<body style="margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9;">
+
+    <nav style="background:#000; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; color:#ffb81c;">
+    <div style="font-size:1.2rem; font-weight:bold;">🇯🇲 JA Threads</div>
+    <div id="nav-links">
+        <a href="home.html" style="color:white; margin-right:15px; text-decoration:none;">Home</a>
+        
+        <a href="products.html" style="color:white; margin-right:15px; text-decoration:none;">Shop</a>
+        
+        <a href="cart.html" style="color:white; margin-right:15px; text-decoration:none;">Cart</a>
+        <a href="dashboard.html" style="color:#ffb81c; font-weight:bold; text-decoration:none;">Dashboard</a>
+        
+        <button onclick="logout()" style="margin-left:15px; padding:5px 10px; cursor:pointer; background:#d9534f; color:white; border:none; border-radius:4px;">Logout</button>
+    </div>
+</nav>
+
+    <header class="hero">
+        <h1>Wear Your Pride.</h1>
+        <p>Premium Jamaican Branded Apparel designed for the bold and the irie.</p>
+        <a href="products.html" class="shop-btn">SHOP THE COLLECTION</a>
+    </header>
+
+    <section style="max-width: 1200px; margin: 60px auto; padding: 0 20px; text-align: center;">
+        <h2 style="color: #007749; font-size: 2.5rem;">Why Choose JA Threads?</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
+            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <div style="font-size: 3rem; margin-bottom: 15px;">👕</div>
+                <h3>Quality Fabric</h3>
+                <p>100% premium cotton tees built for the Jamaican heat.</p>
+            </div>
+            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <div style="font-size: 3rem; margin-bottom: 15px;">🎨</div>
+                <h3>Unique Designs</h3>
+                <p>Authentic culture-inspired graphics you won't find anywhere else.</p>
+            </div>
+            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <div style="font-size: 3rem; margin-bottom: 15px;">🚚</div>
+                <h3>Island-wide Delivery</h3>
+                <p>Fast shipping across all 14 parishes.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background: #000; color: #888; text-align: center; padding: 40px 20px; margin-top: 60px;">
+        <p>&copy; 2026 Jamaican Branded Tees | Richardo White, Donnyl Williams, Michalia Williams </p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">University of Technology, Jamaica | AI Software Engineering Project</p>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
